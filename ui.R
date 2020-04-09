@@ -13,6 +13,14 @@ shinyUI(fluidPage (
                                                                                       "Pakistan")], country_list[which(country_list == "Malaysia")]),
       multiple = T
     ),
+    selectInput(
+      "Scale",
+      label = "Comparative Charts' Scale",
+      choices =
+        c("Linear", "Log"),
+      selected = "Linear",
+      multiple = F
+    ),
     submitButton(text = "View")
   ),
   mainPanel (h1(""),
@@ -38,7 +46,7 @@ shinyUI(fluidPage (
                  plotlyOutput("fig_recov")
                ),
                tabPanel(
-                 "Ratio Analysis",
+                 "Metrics",
                  plotlyOutput("fig_confirm_S"),
                  br(),
                  plotlyOutput("fig_confirm_D"),

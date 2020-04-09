@@ -9,7 +9,7 @@ shinyServer(function(input, output) {
       name = paste("Global Situation as of", bangladesh_data[nrow(bangladesh_data), ncol(bangladesh_data)]),
       type = "bar",
       marker = list(color = "#0072B2"),
-      width = 800
+      width = 900
     ) %>% layout(xaxis = list(title = paste(
       "Global Situation as of", bangladesh_data[nrow(bangladesh_data), ncol(bangladesh_data)]
     )))
@@ -23,7 +23,7 @@ shinyServer(function(input, output) {
         name = "Confirmed",
         type = "scatter",
         mode = "lines",
-        width = 800
+        width = 900
       ) %>% layout(title = "COVID-19 TIME SERIES",
                    yaxis = list(title = "Count"))
     
@@ -52,7 +52,7 @@ shinyServer(function(input, output) {
         name = "Global Recovery to Death Ratio",
         type = "scatter",
         mode = "lines",
-        width = 800
+        width = 900
       ) %>% layout(title = "Global Recovery to Death Ratio",
                    yaxis = list(title = "Recovery to Death (%)"))
     
@@ -71,7 +71,7 @@ shinyServer(function(input, output) {
         name = "Cumulative CFR",
         type = "scatter",
         mode = "lines",
-        width = 800
+        width = 900
       ) %>% layout(title = "Case Fatality Rate (%)",
                    yaxis = list(title = "CFR (%)"))
     
@@ -99,7 +99,7 @@ shinyServer(function(input, output) {
         name = "New Cases",
         type = "scatter",
         mode = "lines",
-        width = 800
+        width = 900
       ) %>% layout(title = "% Change over 3 Days",
                    yaxis = list(title = "% Change"))
     
@@ -129,9 +129,9 @@ shinyServer(function(input, output) {
     # confirmed cases
     world_confirmed <- as.data.frame(t(world_confirmed))
     
-    world_conf <- world_confirmed[5:nrow(world_confirmed), ]
+    world_conf <- world_confirmed[5:nrow(world_confirmed),]
     
-    names(world_conf) <- unlist(c(world_confirmed[2,]))
+    names(world_conf) <- unlist(c(world_confirmed[2, ]))
     
     world_conf$Date <- row.names(world_conf)
     
@@ -153,12 +153,19 @@ shinyServer(function(input, output) {
     # get rid of the 0 values with NA
     world_conf_mod <- na_if(world_conf, 0)
     
+    # turn into log scale
+    if (input$Scale == "Log") {
+      world_conf_mod[, -ncol(world_conf_mod)] <-
+        sapply(world_conf_mod[, -ncol(world_conf_mod)], function(x)
+          log(x))
+    }
+    
     # fatality
     world_death <- as.data.frame(t(world_death))
     
-    world_dead <- world_death[5:nrow(world_death), ]
+    world_dead <- world_death[5:nrow(world_death),]
     
-    names(world_dead) <- unlist(c(world_death[2,]))
+    names(world_dead) <- unlist(c(world_death[2, ]))
     
     world_dead$Date <- row.names(world_dead)
     
@@ -180,12 +187,19 @@ shinyServer(function(input, output) {
     # get rid of the 0 values with NA
     world_dead_mod <- na_if(world_dead, 0)
     
+    # convert into log scale
+    if (input$Scale == "Log") {
+      world_dead_mod[, -ncol(world_dead_mod)] <-
+        sapply(world_dead_mod[, -ncol(world_dead_mod)], function(x)
+          log(x))
+    }
+    
     # recovered cases
     world_recover <- as.data.frame(t(world_recover))
     
-    world_recov <- world_recover[5:nrow(world_recover), ]
+    world_recov <- world_recover[5:nrow(world_recover),]
     
-    names(world_recov) <- unlist(c(world_recover[2,]))
+    names(world_recov) <- unlist(c(world_recover[2, ]))
     
     world_recov$Date <- row.names(world_recov)
     
@@ -207,6 +221,12 @@ shinyServer(function(input, output) {
     # get rid of the 0 values with NA
     world_recov_mod <- na_if(world_recov, 0)
     
+    # convert the country charts into log scale
+    if (input$Scale == "Log") {
+      world_recov_mod[, -ncol(world_recov_mod)] <-
+        sapply(world_recov_mod[, -ncol(world_recov_mod)], function(x)
+          log(x))
+    }
     
     # plot the comparison time series
     # confirmed cases
@@ -218,9 +238,9 @@ shinyServer(function(input, output) {
         name = names(world_conf_mod)[1],
         type = "scatter",
         mode = "lines",
-        width = 800
+        width = 900
       ) %>% layout(
-        title = "Cumulative Confirmed Cases",
+        title = "Cumulative Confirmed Cases (In Natural Log Scale)",
         xaxis = list(range = c(mindate, max(
           world_conf_mod$Date
         ))),
@@ -241,9 +261,9 @@ shinyServer(function(input, output) {
         name = names(world_dead_mod)[1],
         type = "scatter",
         mode = "lines",
-        width = 800
+        width = 900
       ) %>% layout(
-        title = "Cumulative Deaths",
+        title = "Cumulative Deaths (In Natural Log Scale)",
         xaxis = list(range = c(mindateD, max(
           world_dead_mod$Date
         ))),
@@ -264,9 +284,9 @@ shinyServer(function(input, output) {
         name = names(world_recov_mod)[1],
         type = "scatter",
         mode = "lines",
-        width = 800
+        width = 900
       ) %>% layout(
-        title = "Cumulative Recovered Cases",
+        title = "Cumulative Recovered Cases (In Natural Log Scale)",
         xaxis = list(range = c(mindateR, max(
           world_recov_mod$Date
         ))),
@@ -293,7 +313,7 @@ shinyServer(function(input, output) {
         name = names(world_conf)[1],
         type = "scatter",
         mode = "lines",
-        width = 800
+        width = 900
       ) %>% layout(
         title = "Cumulative Confirmed Cases since the First Case was Confirmed",
         xaxis = list(range = c(1, length(max_case)), title = "Days Since First Confirmed Case"),
@@ -323,7 +343,7 @@ shinyServer(function(input, output) {
         name = names(world_dead)[1],
         type = "scatter",
         mode = "lines",
-        width = 800
+        width = 900
       ) %>% layout(
         title = "Cumulative Deaths since the First Fatality Occured",
         xaxis = list(range = c(1, length(max_case_D)), title = "Days Since First Death"),
@@ -359,7 +379,7 @@ shinyServer(function(input, output) {
         name = names(recov_death)[1],
         type = "scatter",
         mode = "lines",
-        width = 800
+        width = 900
       ) %>% layout(
         title = "Cumulative Recovery to Cumulative Death since the First Fatality Occured",
         xaxis = list(range = c(1, length(max_case_D)), title = "Days Since First Death"),
@@ -419,7 +439,7 @@ shinyServer(function(input, output) {
             name = paste("Cumulative CFR", names(dead_conf_daily)[i]),
             type = "scatter",
             mode = "lines",
-            width = 800,
+            width = 900,
             line = list(color = "#56B4E9")
           ) %>% layout(
             showlegend = T,
