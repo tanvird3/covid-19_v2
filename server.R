@@ -328,7 +328,7 @@ shinyServer(function(input, output) {
                                                                         ))), name = trace)
     }
     
-    # comparative death chart since first detected case
+    # comparative death chart since first death
     max_case_D <-
       c(1:max(colSums(world_dead[, 1:(ncol(world_dead) - 1)] != 0)))
     
@@ -434,12 +434,12 @@ shinyServer(function(input, output) {
         plotly_build(
           plot_ly(
             dead_conf,
-            x = ~ c(1:colSums(dead_conf != 0)[i]),
-            y = ~ c(dead_conf[, i][dead_conf[, i] != 0]),
+            x = ~ max_case_D,
+            y = ~ tail(dead_conf[, i], length(max_case_D)),
             name = paste("Cumulative CFR", names(dead_conf_daily)[i]),
             type = "scatter",
             mode = "lines",
-            width = 900,
+            width = 900, height = 200 * ncol(dead_conf_daily), 
             line = list(color = "#56B4E9")
           ) %>% layout(
             showlegend = T,
@@ -447,7 +447,7 @@ shinyServer(function(input, output) {
             xaxis = list(range = c(1, colSums(dead_conf != 0)[i]), title = "Days Since First Death"),
             yaxis = list(title = names(dead_conf_daily)[i])
           ) %>% add_trace(
-            y =  ~ dead_conf_daily[d_trace:nrow(dead_conf_daily), i],
+            y =  ~ tail(dead_conf_daily[, i], length(max_case_D)),
             name = paste("Daily CFR", names(dead_conf_daily)[i]),
             line = list(color = "#D55E00")
           )
