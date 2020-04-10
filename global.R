@@ -67,9 +67,9 @@ recover_data$`Country/Region` <-
 
 # get the global time series
 # confirmed case
-global_conf <- select(confirmed_data,-c(1, 3, 4))
+global_conf <- select(confirmed_data, -c(1, 3, 4))
 global_conf <- as.data.frame(t(global_conf))
-global_conf_u <- global_conf[2:nrow(global_conf), ]
+global_conf_u <- global_conf[2:nrow(global_conf),]
 gdate <- global_conf_u
 global_conf_u <- data.frame(apply(global_conf_u, 2, as.numeric))
 global_conf_u$Date <-
@@ -81,9 +81,9 @@ global_conf_u <-
                                                               1)]))
 
 # deaths
-global_death <- select(death_data,-c(1, 3, 4))
+global_death <- select(death_data, -c(1, 3, 4))
 global_death <- as.data.frame(t(global_death))
-global_death_u <- global_death[2:nrow(global_death), ]
+global_death_u <- global_death[2:nrow(global_death),]
 gdate <- global_death_u
 global_death_u <- data.frame(apply(global_death_u, 2, as.numeric))
 global_death_u$Date <-
@@ -94,9 +94,9 @@ global_death_u <-
   mutate(global_death_u, global = rowSums(global_death_u[, 1:(ncol(global_death_u) -
                                                                 1)]))
 # recovery
-global_recov <- select(recover_data,-c(1, 3, 4))
+global_recov <- select(recover_data, -c(1, 3, 4))
 global_recov <- as.data.frame(t(global_recov))
-global_recov_u <- global_recov[2:nrow(global_recov), ]
+global_recov_u <- global_recov[2:nrow(global_recov),]
 gdate <- global_recov_u
 global_recov_u <- data.frame(apply(global_recov_u, 2, as.numeric))
 global_recov_u$Date <-
