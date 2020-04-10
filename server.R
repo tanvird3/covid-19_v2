@@ -143,9 +143,9 @@ shinyServer(function(input, output) {
     # confirmed cases
     world_confirmed <- as.data.frame(t(world_confirmed))
     
-    world_conf <- world_confirmed[5:nrow(world_confirmed), ]
+    world_conf <- world_confirmed[5:nrow(world_confirmed),]
     
-    names(world_conf) <- unlist(c(world_confirmed[2,]))
+    names(world_conf) <- unlist(c(world_confirmed[2, ]))
     
     world_conf$Date <- row.names(world_conf)
     
@@ -167,12 +167,13 @@ shinyServer(function(input, output) {
     # get rid of the 0 values with NA
     world_conf_mod <- na_if(world_conf, 0)
     
-    # turn into log scale
+    # turn into log scale (if that option is selected)
+    # manage the title of the plots as well
     title_conf <- "Cumulative Confirmed Cases"
     
     if (input$Scale == "Log") {
-      world_conf_mod[,-ncol(world_conf_mod)] <-
-        sapply(world_conf_mod[,-ncol(world_conf_mod)], function(x)
+      world_conf_mod[, -ncol(world_conf_mod)] <-
+        sapply(world_conf_mod[, -ncol(world_conf_mod)], function(x)
           log(x))
       title_conf <- "Cumulative Confirmed Cases (In Log Scale)"
     }
@@ -180,9 +181,9 @@ shinyServer(function(input, output) {
     # fatality
     world_death <- as.data.frame(t(world_death))
     
-    world_dead <- world_death[5:nrow(world_death), ]
+    world_dead <- world_death[5:nrow(world_death),]
     
-    names(world_dead) <- unlist(c(world_death[2,]))
+    names(world_dead) <- unlist(c(world_death[2, ]))
     
     world_dead$Date <- row.names(world_dead)
     
@@ -204,12 +205,13 @@ shinyServer(function(input, output) {
     # get rid of the 0 values with NA
     world_dead_mod <- na_if(world_dead, 0)
     
-    # convert into log scale
+    # convert into log scale (if that option is selected)
+    # manage the title as well
     title_dead <- "Cumulative Deaths"
     
     if (input$Scale == "Log") {
-      world_dead_mod[,-ncol(world_dead_mod)] <-
-        sapply(world_dead_mod[,-ncol(world_dead_mod)], function(x)
+      world_dead_mod[, -ncol(world_dead_mod)] <-
+        sapply(world_dead_mod[, -ncol(world_dead_mod)], function(x)
           log(x))
       title_dead <- "Cumulative Deaths (In Log Scale)"
     }
@@ -217,9 +219,9 @@ shinyServer(function(input, output) {
     # recovered cases
     world_recover <- as.data.frame(t(world_recover))
     
-    world_recov <- world_recover[5:nrow(world_recover), ]
+    world_recov <- world_recover[5:nrow(world_recover),]
     
-    names(world_recov) <- unlist(c(world_recover[2,]))
+    names(world_recov) <- unlist(c(world_recover[2, ]))
     
     world_recov$Date <- row.names(world_recov)
     
@@ -241,12 +243,13 @@ shinyServer(function(input, output) {
     # get rid of the 0 values with NA
     world_recov_mod <- na_if(world_recov, 0)
     
-    # convert the country charts into log scale
-    
+    # convert the country charts into log scale (if that option is selected)
+    # manage title as well
     title_recov <- "Cumulative Recovered Cases"
+    
     if (input$Scale == "Log") {
-      world_recov_mod[,-ncol(world_recov_mod)] <-
-        sapply(world_recov_mod[,-ncol(world_recov_mod)], function(x)
+      world_recov_mod[, -ncol(world_recov_mod)] <-
+        sapply(world_recov_mod[, -ncol(world_recov_mod)], function(x)
           log(x))
       title_recov <- "Cumulative Recovered Cases (In Log Scale)"
     }
@@ -322,17 +325,19 @@ shinyServer(function(input, output) {
     }
     
     # comparative chart since first detected case
+    # get the maximum days of the selected countries since first case detected
     max_case <-
       c(1:max(colSums(world_conf[, 1:(ncol(world_conf) - 1)] != 0)))
     
+    # modify the data a bit if log is selected
     world_conf_c <- world_conf
     
     title <-
       "Cumulative Confirmed Cases since the First Case was Confirmed"
     
     if (input$Scale == "Log") {
-      world_conf_c[,-ncol(world_conf_c)] <-
-        sapply(world_conf_c[,-ncol(world_conf_c)], function(x)
+      world_conf_c[, -ncol(world_conf_c)] <-
+        sapply(world_conf_c[, -ncol(world_conf_c)], function(x)
           log(x))
       title <-
         "Cumulative Confirmed Cases (In Log Scale) since the First Case was Confirmed"
@@ -365,16 +370,18 @@ shinyServer(function(input, output) {
     }
     
     # comparative death chart since first death
+    # get the maximum length of the given countries since first death occured
     max_case_D <-
       c(1:max(colSums(world_dead[, 1:(ncol(world_dead) - 1)] != 0)))
     
+    # mofify the data a bit if log is selected
     world_dead_c <- world_dead
     
     title <- "Cumulative Deaths since the First Fatality Occured"
     
     if (input$Scale == "Log") {
-      world_dead_c[,-ncol(world_dead_c)] <-
-        sapply(world_dead_c[,-ncol(world_dead_c)], function(x)
+      world_dead_c[, -ncol(world_dead_c)] <-
+        sapply(world_dead_c[, -ncol(world_dead_c)], function(x)
           log(x))
       title <-
         "Cumulative Deaths (In Log Scale) since the First Fatality Occured"
@@ -406,12 +413,17 @@ shinyServer(function(input, output) {
                                                                           ))), name = trace)
     }
     
-    # get the recover toe death ratio data frame and get the plot
+    # get the recover to death ratio data frame and get the plot
+    # calculate the ratio
     recov_death <-
       world_recov[, 1:(ncol(world_recov) - 1)] / world_dead[, 1:(ncol(world_dead) - 1)]
+    
+    # get rid of NA and Inf values
     recov_death[is.na(recov_death)] <- 0
     recov_death[recov_death == Inf] <- 0
     recov_death$Date <- row.names(recov_death)
+    
+    # set the date column
     recov_death$Date <-
       as.Date(recov_death$Date, format = "%m/%d/%y")
     
@@ -420,9 +432,9 @@ shinyServer(function(input, output) {
       plot_ly(
         recov_death,
         x = ~ max_case_D,
-        y = ~ c(recov_death[, 1][world_dead[, 1] != 0],
+        y = ~ c(recov_death[, 1][world_dead[, 1] != 0], # plot the ratio only since the first death occured
                 rep(NA, (
-                  length(max_case_D) - length(recov_death[, 1][world_dead[, 1] != 0])
+                  length(max_case_D) - length(recov_death[, 1][world_dead[, 1] != 0]) # fill the rest length of max_case_d with NA
                 ))),
         name = names(recov_death)[1],
         type = "scatter",
@@ -443,14 +455,21 @@ shinyServer(function(input, output) {
     }
     
     # generate the case fatality rate plot (dead/confirmed) daily and cumulative basis
+    # first cumulative
+    # get the ratio
     dead_conf <-
       world_dead[, 1:(ncol(world_dead) - 1)] / world_conf[, 1:(ncol(world_conf) - 1)] * 100
+    
+    # get rid of na and inf
     dead_conf[is.na(dead_conf)] <- 0
     dead_conf[dead_conf == Inf] <- 0
     dead_conf$Date <- row.names(dead_conf)
+    
+    # set the date column
     dead_conf$Date <-
       as.Date(dead_conf$Date, format = "%m/%d/%y")
     
+    # now calculate the daily incidents
     # create the daily death series
     dead_daily <-
       data.frame(sapply(world_dead[, 1:(ncol(world_dead) - 1)], function(x)
@@ -475,39 +494,61 @@ shinyServer(function(input, output) {
     # now generate the plots
     fig_cfr <- list()
     
+    # there are cluntries/regions without any deaths, in that case get rid of the absurd figures
     for (i in 1:(ncol(dead_conf_daily))) {
       if (!is.na(which(world_dead[, i] != 0)[1])) {
+        # if there are deaths
         d_trace <-
-          c(1:(nrow(world_dead) + 1 - which(world_dead[, i] != 0)[1]))
+          c(1:(nrow(world_dead) + 1 - which(world_dead[, i] != 0)[1])) # take from the last row value to the first death
       } else {
-        d_trace <- NA
+        d_trace <- NA # if no death just leave an NA
       }
       
+      # create a new data frame where the first column will be 1. days since first death (2 times)
+      # 2. rbind(cum cfr, daily cfr), 3. type (first cum cfr, then daily cfr)
+      cfr_d <-
+        data.frame(
+          trace = rep(d_trace, 2),
+          dc = c(
+            tail(dead_conf[, i], length(d_trace)),
+            tail(dead_conf_daily[, i], length(d_trace))
+          ),
+          Type = c(rep("Cumulative CFR", length(
+            tail(dead_conf[, i], length(d_trace))
+          )), rep("Daily CFR",
+                  length(
+                    tail(dead_conf_daily[, i], length(d_trace))
+                  )))
+        )
+      
+      # now generate the plots (as list)
       fig_cfr[[i]] <-
-        plotly_build(
-          plot_ly(
-            dead_conf,
-            x = ~ d_trace,
-            y = ~ tail(dead_conf[, i], length(d_trace)),
-            name = paste("Cumulative CFR", names(dead_conf_daily)[i]),
-            type = "scatter",
-            mode = "lines",
-            width = 900,
-            height = 200 * ncol(dead_conf_daily),
-            line = list(color = "#56B4E9")
-          ) %>% layout(
-            showlegend = T,
-            title = "Case Fatality Rate (%)",
-            xaxis = list(title = "Days Since First Death"),
-            yaxis = list(title = names(dead_conf_daily)[i])
-          ) %>% add_trace(
-            y =  ~ tail(dead_conf_daily[, i], length(d_trace)),
-            name = paste("Daily CFR", names(dead_conf_daily)[i]),
-            line = list(color = "#D55E00")
-          )
+        cfr_d %>%
+        plot_ly(
+          x = ~ trace,
+          y = ~ dc,
+          color = ~ Type,
+          colors = c("#D55E00", "#56B4E9"),
+          legendgroup =  ~ Type,
+          type = "scatter",
+          mode = "lines",
+          width = 900,
+          height =  200 * ncol(dead_conf_daily),
+          showlegend = ifelse(i == ncol(dead_conf_daily), T, F)
+        ) %>% layout(
+          title = "Case Fatality Rate (%)",
+          xaxis = list(title = paste0(
+            "Days Since First Death",
+            " ",
+            "(",
+            names(dead_conf_daily)[i],
+            ")"
+          )),
+          yaxis = list(title = "CFR (%)")
         )
     }
     
+    # get all the plots in a subplot
     fig_cfr_print <-
       subplot(
         fig_cfr,
