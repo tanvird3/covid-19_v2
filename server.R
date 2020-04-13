@@ -491,8 +491,37 @@ shinyServer(function(input, output) {
     
     dead_conf_daily[dead_conf_daily < 0] <- 0
     
-    # now generate the plots
+    # now generate the blank list of plots plots (cfr)
     fig_cfr <- list()
+    
+    
+    # 3 Day % change in confirmed cases and fatality
+    # 3 day difference of deaths
+    dead_daily_p <-
+      data.frame(sapply(world_dead[, 1:(ncol(world_dead) - 1)], function(x)
+        diff(x, 3) / x[1:(length(x) - 3)] * 100))
+    
+    # cleanse the data
+    #dead_daily_p[is.na(dead_daily_p)] <- 0
+    
+    #dead_daily_p[dead_daily_p == Inf] <- 0
+    
+    dead_daily_p[dead_daily_p < 0] <- 0
+    
+    # 3 day difference of cases
+    conf_daily_p <-
+      data.frame(sapply(world_conf[, 1:(ncol(world_conf) - 1)], function(x)
+        diff(x, 3) / x[1:(length(x) - 3)] * 100))
+    
+    # cleanse the data
+    #conf_daily_p[is.na(conf_daily_p)] <- 0
+    
+    #conf_daily_p[conf_daily_p == Inf] <- 0
+    
+    conf_daily_p[conf_daily_p < 0] <- 0
+    
+    # now generate the blank list of plots (3 day % change)
+    fig_cp <- list()
     
     # we now have to generate a series d_trace starting from 1 to the number of days elapsed since the first death
     # there are cluntries/regions without any deaths, in that case get rid of the error
@@ -539,7 +568,9 @@ shinyServer(function(input, output) {
           showlegend = ifelse(i == ncol(dead_conf_daily), T, F)
         ) %>% layout(
           title = "Case Fatality Rate (%)",
-          xaxis = list(title = ifelse(i == 4, "Days Since First Death", "")),
+          xaxis = list(title = ifelse(
+            i == ncol(dead_conf_daily), "Days Since First Death", ""
+          )),
           yaxis = list(title = "CFR (%)")
         ) %>% add_annotations(
           text = names(dead_conf_daily)[i],
@@ -552,60 +583,10 @@ shinyServer(function(input, output) {
           showarrow = FALSE,
           font = list(size = 15)
         )
-    }
-    
-    # get all the plots in a subplot
-    fig_cfr_print <-
-      subplot(
-        fig_cfr,
-        nrows = ncol(dead_conf_daily),
-        titleY = T,
-        titleX = T
-      )
-    
-    # 3 Day % change in confirmed cases and fatality
-    # 3 day difference of deaths
-    dead_daily_p <-
-      data.frame(sapply(world_dead[, 1:(ncol(world_dead) - 1)], function(x)
-        diff(x, 3) / x[1:(length(x) - 3)] * 100))
-    
-    # cleanse the data
-    #dead_daily_p[is.na(dead_daily_p)] <- 0
-    
-    #dead_daily_p[dead_daily_p == Inf] <- 0
-    
-    dead_daily_p[dead_daily_p < 0] <- 0
-    
-    # 3 day difference of cases
-    conf_daily_p <-
-      data.frame(sapply(world_conf[, 1:(ncol(world_conf) - 1)], function(x)
-        diff(x, 3) / x[1:(length(x) - 3)] * 100))
-    
-    # cleanse the data
-    #conf_daily_p[is.na(conf_daily_p)] <- 0
-    
-    #conf_daily_p[conf_daily_p == Inf] <- 0
-    
-    conf_daily_p[conf_daily_p < 0] <- 0
-    
-    
-    # now generate the plots
-    fig_cp <- list()
-    
-    # we now have to generate a series d_trace starting from 1 to the number of days elapsed since the first death
-    # there are cluntries/regions without any deaths, in that case get rid of the error
-    # if no death occured d_trace is just NA
-    for (i in 1:(ncol(dead_conf_daily))) {
-      if (!is.na(which(world_dead[, i] != 0)[1])) {
-        # if there are deaths
-        d_trace <-
-          c(1:(nrow(world_dead) + 1 - which(world_dead[, i] != 0)[1])) # take from the last row value to the first death
-      } else {
-        d_trace <- NA # if no death just leave an NA
-      }
       
+      # now the 3 day % change plot
       # create a new data frame where the first column will be 1. days since first death (2 times)
-      # 2. rbind(cum cfr, daily cfr), 3. type (first cum cfr, then daily cfr)
+      # 2. rbind(3 day % change confirm, 3 day % change death), 3. type (first 3 day % change conf, then 3 day % change death)
       change_p <-
         data.frame(
           trace = rep(d_trace, 2),
@@ -637,7 +618,9 @@ shinyServer(function(input, output) {
           showlegend = ifelse(i == ncol(dead_conf_daily), T, F)
         ) %>% layout(
           title = "3-Day % Change",
-          xaxis = list(title = ifelse(i == 4, "Days Since First Death", "")),
+          xaxis = list(title = ifelse(
+            i == ncol(dead_conf_daily), "Days Since First Death", ""
+          )),
           yaxis = list(title = "3-DAY % CHANGE")
         ) %>% add_annotations(
           text = names(dead_conf_daily)[i],
@@ -650,7 +633,17 @@ shinyServer(function(input, output) {
           showarrow = FALSE,
           font = list(size = 15)
         )
+      
     }
+    
+    # get all the plots in a subplot
+    fig_cfr_print <-
+      subplot(
+        fig_cfr,
+        nrows = ncol(dead_conf_daily),
+        titleY = T,
+        titleX = T
+      )
     
     
     # get all the plots in a subplot

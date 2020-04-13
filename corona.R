@@ -492,7 +492,7 @@ comparison <- function(countries) {
 }
 
 # name the desired countries
-countries <- c("India", "Pakistan")
+countries <- c("India", "Pakistan", "South Africa")
 
 # run the function
 comparison(countries)
