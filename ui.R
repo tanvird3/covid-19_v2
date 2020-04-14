@@ -1,4 +1,3 @@
-library(shiny)
 shinyUI(fluidPage (
   theme = shinytheme("superhero"),
   headerPanel("COVID-19 Data Visualizer"),
