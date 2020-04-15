@@ -51,6 +51,7 @@ shinyServer(function(input, output) {
       font = list(size = 15)
     )
     
+    # subplot these two summary plots 
     figG <- subplot(figG, figB, nrows = 1)
     
     # plot the global time series
