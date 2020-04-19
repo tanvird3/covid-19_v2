@@ -15,7 +15,8 @@ shinyServer(function(input, output) {
       width = 900
     ) %>% layout(xaxis = list(title = paste(
       "Global Situation as of", bangladesh_data[nrow(bangladesh_data), ncol(bangladesh_data)]
-    ))) %>% add_annotations(
+    )),
+    yaxis = list(hoverformat = ",.0f")) %>% add_annotations(
       text = paste("Global Situation as of", bangladesh_data[nrow(bangladesh_data), ncol(bangladesh_data)]),
       x = 0.1,
       y = 1.05,
@@ -41,7 +42,8 @@ shinyServer(function(input, output) {
       width = 900
     ) %>% layout(xaxis = list(title = paste(
       "Situation of Bangladesh as of", bangladesh_data[nrow(bangladesh_data), ncol(bangladesh_data)]
-    ))) %>% add_annotations(
+    )),
+    yaxis = list(hoverformat = ",.0f")) %>% add_annotations(
       text = paste("Bangladesh Situation as of", bangladesh_data[nrow(bangladesh_data), ncol(bangladesh_data)]),
       x = 0.9,
       y = 1.05,
