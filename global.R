@@ -3,7 +3,6 @@ library(plyr)
 library(plotly)
 library(dplyr)
 library(shiny)
-library(shinyMobile)
 library(shinythemes)
 library(shinyjs)
 

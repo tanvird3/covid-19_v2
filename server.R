@@ -11,6 +11,7 @@ shinyServer(function(input, output) {
       type = "bar",
       marker = list(color = "#0072B2"),
       showlegend = F,
+      hoverinfo = "x+y",
       width = 900
     ) %>% layout(xaxis = list(title = paste(
       "Global Situation as of", bangladesh_data[nrow(bangladesh_data), ncol(bangladesh_data)]
@@ -36,6 +37,7 @@ shinyServer(function(input, output) {
       type = "bar",
       marker = list(color = "#009E73"),
       showlegend = F,
+      hoverinfo = "x+y",
       width = 900
     ) %>% layout(xaxis = list(title = paste(
       "Situation of Bangladesh as of", bangladesh_data[nrow(bangladesh_data), ncol(bangladesh_data)]
@@ -185,9 +187,9 @@ shinyServer(function(input, output) {
     # confirmed cases
     world_confirmed <- as.data.frame(t(world_confirmed))
     
-    world_conf <- world_confirmed[5:nrow(world_confirmed), ]
+    world_conf <- world_confirmed[5:nrow(world_confirmed),]
     
-    names(world_conf) <- unlist(c(world_confirmed[2,]))
+    names(world_conf) <- unlist(c(world_confirmed[2, ]))
     
     world_conf$Date <- row.names(world_conf)
     
@@ -214,8 +216,8 @@ shinyServer(function(input, output) {
     title_conf <- "Cumulative Confirmed Cases"
     
     if (input$Scale == "Log") {
-      world_conf_mod[,-ncol(world_conf_mod)] <-
-        sapply(world_conf_mod[,-ncol(world_conf_mod)], function(x)
+      world_conf_mod[, -ncol(world_conf_mod)] <-
+        sapply(world_conf_mod[, -ncol(world_conf_mod)], function(x)
           log(x))
       title_conf <- "Cumulative Confirmed Cases (In Log Scale)"
     }
@@ -223,9 +225,9 @@ shinyServer(function(input, output) {
     # fatality
     world_death <- as.data.frame(t(world_death))
     
-    world_dead <- world_death[5:nrow(world_death), ]
+    world_dead <- world_death[5:nrow(world_death),]
     
-    names(world_dead) <- unlist(c(world_death[2,]))
+    names(world_dead) <- unlist(c(world_death[2, ]))
     
     world_dead$Date <- row.names(world_dead)
     
@@ -252,8 +254,8 @@ shinyServer(function(input, output) {
     title_dead <- "Cumulative Deaths"
     
     if (input$Scale == "Log") {
-      world_dead_mod[,-ncol(world_dead_mod)] <-
-        sapply(world_dead_mod[,-ncol(world_dead_mod)], function(x)
+      world_dead_mod[, -ncol(world_dead_mod)] <-
+        sapply(world_dead_mod[, -ncol(world_dead_mod)], function(x)
           log(x))
       title_dead <- "Cumulative Deaths (In Log Scale)"
     }
@@ -261,9 +263,9 @@ shinyServer(function(input, output) {
     # recovered cases
     world_recover <- as.data.frame(t(world_recover))
     
-    world_recov <- world_recover[5:nrow(world_recover), ]
+    world_recov <- world_recover[5:nrow(world_recover),]
     
-    names(world_recov) <- unlist(c(world_recover[2,]))
+    names(world_recov) <- unlist(c(world_recover[2, ]))
     
     world_recov$Date <- row.names(world_recov)
     
@@ -290,8 +292,8 @@ shinyServer(function(input, output) {
     title_recov <- "Cumulative Recovered Cases"
     
     if (input$Scale == "Log") {
-      world_recov_mod[,-ncol(world_recov_mod)] <-
-        sapply(world_recov_mod[,-ncol(world_recov_mod)], function(x)
+      world_recov_mod[, -ncol(world_recov_mod)] <-
+        sapply(world_recov_mod[, -ncol(world_recov_mod)], function(x)
           log(x))
       title_recov <- "Cumulative Recovered Cases (In Log Scale)"
     }
@@ -378,8 +380,8 @@ shinyServer(function(input, output) {
       "Cumulative Confirmed Cases since the First Case was Confirmed"
     
     if (input$Scale == "Log") {
-      world_conf_c[,-ncol(world_conf_c)] <-
-        sapply(world_conf_c[,-ncol(world_conf_c)], function(x)
+      world_conf_c[, -ncol(world_conf_c)] <-
+        sapply(world_conf_c[, -ncol(world_conf_c)], function(x)
           log(x))
       title <-
         "Cumulative Confirmed Cases (In Log Scale) since the First Case was Confirmed"
@@ -422,8 +424,8 @@ shinyServer(function(input, output) {
     title <- "Cumulative Deaths since the First Fatality Occured"
     
     if (input$Scale == "Log") {
-      world_dead_c[,-ncol(world_dead_c)] <-
-        sapply(world_dead_c[,-ncol(world_dead_c)], function(x)
+      world_dead_c[, -ncol(world_dead_c)] <-
+        sapply(world_dead_c[, -ncol(world_dead_c)], function(x)
           log(x))
       title <-
         "Cumulative Deaths (In Log Scale) since the First Fatality Occured"
