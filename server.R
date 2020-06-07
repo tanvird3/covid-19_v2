@@ -68,7 +68,7 @@ shinyServer(function(input, output) {
         type = "scatter",
         mode = "lines",
         width = 900
-      ) %>% layout(title = "GLOBAL COVID-19 TIME SERIES",
+      ) %>% layout(title = "<br>GLOBAL COVID-19 TIME SERIES",
                    yaxis = list(title = "Count"))
     
     global_time <-
@@ -97,7 +97,7 @@ shinyServer(function(input, output) {
         type = "scatter",
         mode = "lines",
         width = 900
-      ) %>% layout(title = "Global Recovery to Death Ratio",
+      ) %>% layout(title = "<br>Global Recovery to Death Ratio",
                    yaxis = list(title = "Recovery to Death (%)"))
     
     
@@ -116,7 +116,7 @@ shinyServer(function(input, output) {
         type = "scatter",
         mode = "lines",
         width = 900
-      ) %>% layout(title = "Global Case Fatality Rate (%)",
+      ) %>% layout(title = "<br>Global Case Fatality Rate (%)",
                    yaxis = list(title = "CFR (%)"))
     
     global_cfr <-
@@ -144,7 +144,7 @@ shinyServer(function(input, output) {
         type = "scatter",
         mode = "lines",
         width = 900
-      ) %>% layout(title = "Global % Change over 3 Days",
+      ) %>% layout(title = "<br>Global % Change over 3 Days",
                    yaxis = list(title = "% Change"))
     
     global_p <-
@@ -189,9 +189,9 @@ shinyServer(function(input, output) {
     # confirmed cases
     world_confirmed <- as.data.frame(t(world_confirmed))
     
-    world_conf <- world_confirmed[5:nrow(world_confirmed),]
+    world_conf <- world_confirmed[5:nrow(world_confirmed), ]
     
-    names(world_conf) <- unlist(c(world_confirmed[2, ]))
+    names(world_conf) <- unlist(c(world_confirmed[2,]))
     
     world_conf$Date <- row.names(world_conf)
     
@@ -215,21 +215,21 @@ shinyServer(function(input, output) {
     
     # turn into log scale (if that option is selected)
     # manage the title of the plots as well
-    title_conf <- "Cumulative Confirmed Cases"
+    title_conf <- "<br>Cumulative Confirmed Cases"
     
     if (input$Scale == "Log") {
-      world_conf_mod[, -ncol(world_conf_mod)] <-
-        sapply(world_conf_mod[, -ncol(world_conf_mod)], function(x)
+      world_conf_mod[,-ncol(world_conf_mod)] <-
+        sapply(world_conf_mod[,-ncol(world_conf_mod)], function(x)
           log(x))
-      title_conf <- "Cumulative Confirmed Cases (In Log Scale)"
+      title_conf <- "<br>Cumulative Confirmed Cases (In Log Scale)"
     }
     
     # fatality
     world_death <- as.data.frame(t(world_death))
     
-    world_dead <- world_death[5:nrow(world_death),]
+    world_dead <- world_death[5:nrow(world_death), ]
     
-    names(world_dead) <- unlist(c(world_death[2, ]))
+    names(world_dead) <- unlist(c(world_death[2,]))
     
     world_dead$Date <- row.names(world_dead)
     
@@ -253,21 +253,21 @@ shinyServer(function(input, output) {
     
     # convert into log scale (if that option is selected)
     # manage the title as well
-    title_dead <- "Cumulative Deaths"
+    title_dead <- "<br>Cumulative Deaths"
     
     if (input$Scale == "Log") {
-      world_dead_mod[, -ncol(world_dead_mod)] <-
-        sapply(world_dead_mod[, -ncol(world_dead_mod)], function(x)
+      world_dead_mod[,-ncol(world_dead_mod)] <-
+        sapply(world_dead_mod[,-ncol(world_dead_mod)], function(x)
           log(x))
-      title_dead <- "Cumulative Deaths (In Log Scale)"
+      title_dead <- "<br>Cumulative Deaths (In Log Scale)"
     }
     
     # recovered cases
     world_recover <- as.data.frame(t(world_recover))
     
-    world_recov <- world_recover[5:nrow(world_recover),]
+    world_recov <- world_recover[5:nrow(world_recover), ]
     
-    names(world_recov) <- unlist(c(world_recover[2, ]))
+    names(world_recov) <- unlist(c(world_recover[2,]))
     
     world_recov$Date <- row.names(world_recov)
     
@@ -291,13 +291,13 @@ shinyServer(function(input, output) {
     
     # convert the country charts into log scale (if that option is selected)
     # manage title as well
-    title_recov <- "Cumulative Recovered Cases"
+    title_recov <- "<br>Cumulative Recovered Cases"
     
     if (input$Scale == "Log") {
-      world_recov_mod[, -ncol(world_recov_mod)] <-
-        sapply(world_recov_mod[, -ncol(world_recov_mod)], function(x)
+      world_recov_mod[,-ncol(world_recov_mod)] <-
+        sapply(world_recov_mod[,-ncol(world_recov_mod)], function(x)
           log(x))
-      title_recov <- "Cumulative Recovered Cases (In Log Scale)"
+      title_recov <- "<br>Cumulative Recovered Cases (In Log Scale)"
     }
     
     # plot the comparison time series
@@ -379,14 +379,14 @@ shinyServer(function(input, output) {
     world_conf_c <- world_conf
     
     title <-
-      "Cumulative Confirmed Cases since the First Case was Confirmed"
+      "<br>Cumulative Confirmed Cases since the First Case was Confirmed"
     
     if (input$Scale == "Log") {
-      world_conf_c[, -ncol(world_conf_c)] <-
-        sapply(world_conf_c[, -ncol(world_conf_c)], function(x)
+      world_conf_c[,-ncol(world_conf_c)] <-
+        sapply(world_conf_c[,-ncol(world_conf_c)], function(x)
           log(x))
       title <-
-        "Cumulative Confirmed Cases (In Log Scale) since the First Case was Confirmed"
+        "<br>Cumulative Confirmed Cases (In Log Scale) since the First Case was Confirmed"
     }
     
     fig_confirm_S <-
@@ -423,14 +423,15 @@ shinyServer(function(input, output) {
     # mofify the data a bit if log is selected
     world_dead_c <- world_dead
     
-    title <- "Cumulative Deaths since the First Fatality Occured"
+    title <-
+      "<br>Cumulative Deaths since the First Fatality Occured"
     
     if (input$Scale == "Log") {
-      world_dead_c[, -ncol(world_dead_c)] <-
-        sapply(world_dead_c[, -ncol(world_dead_c)], function(x)
+      world_dead_c[,-ncol(world_dead_c)] <-
+        sapply(world_dead_c[,-ncol(world_dead_c)], function(x)
           log(x))
       title <-
-        "Cumulative Deaths (In Log Scale) since the First Fatality Occured"
+        "<br>Cumulative Deaths (In Log Scale) since the First Fatality Occured"
     }
     
     fig_confirm_D <-
@@ -487,7 +488,7 @@ shinyServer(function(input, output) {
         mode = "lines",
         width = 900
       ) %>% layout(
-        title = "Cumulative Recovery to Cumulative Death since the First Fatality Occured",
+        title = "<br>Cumulative Recovery to Cumulative Death since the First Fatality Occured",
         xaxis = list(range = c(1, length(max_case_D)), title = "Days Since First Death"),
         yaxis = list(title = "Cumulative Recovery to Cumulative Death")
       )
@@ -613,13 +614,13 @@ shinyServer(function(input, output) {
           height =  200 * ncol(dead_conf_daily),
           showlegend = ifelse(i == ncol(dead_conf_daily), T, F)
         ) %>% layout(
-          title = "Case Fatality Rate (%)",
+          title = "<br>Case Fatality Rate (%)",
           xaxis = list(title = ifelse(
             i == ncol(dead_conf_daily), "Days Since First Death", ""
           )),
           yaxis = list(title = "CFR (%)")
         ) %>% add_annotations(
-          text = names(dead_conf_daily)[i],
+          text = paste(" ", names(dead_conf_daily)[i], sep = "<br>"),
           x = 0.5,
           y = 1,
           yref = "paper",
@@ -663,13 +664,13 @@ shinyServer(function(input, output) {
           height =  300 * ncol(dead_conf_daily),
           showlegend = ifelse(i == ncol(dead_conf_daily), T, F)
         ) %>% layout(
-          title = "3-Day % Change",
+          title = "<br>3-Day % Change",
           xaxis = list(title = ifelse(
             i == ncol(dead_conf_daily), "Days Since First Death", ""
           )),
           yaxis = list(title = "3-DAY % CHANGE")
         ) %>% add_annotations(
-          text = names(dead_conf_daily)[i],
+          text = paste(" ", names(dead_conf_daily)[i], sep = "<br>"),
           x = 0.5,
           y = 1,
           yref = "paper",
