@@ -8,8 +8,8 @@ shinyUI(fluidPage (
       label = "Select Countries",
       choices =
         country_list,
-      selected = c(country_list[which(country_list == "India")], country_list[which(country_list ==
-                                                                                      "Pakistan")], country_list[which(country_list == "Malaysia")]),
+      selected = c(country_list[which(country_list == "Malaysia")], country_list[which(country_list ==
+                                                                                      "Nepal")], country_list[which(country_list == "Pakistan")]),
       multiple = T
     ),
     selectInput(

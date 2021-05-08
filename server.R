@@ -167,6 +167,9 @@ shinyServer(function(input, output) {
     
   }
   
+  # output for this part
+  output_get1 <- reactive({constant_charts()})
+  
   # now plot the variable plots
   corona_visual <- function(countries) {
     if (length(countries) == 0) {
@@ -719,70 +722,71 @@ shinyServer(function(input, output) {
   }
   
   # generate the outputs
+  output_get2 <- reactive({corona_visual(input$countries)})
   
   output$figG <-
     renderPlotly({
-      constant_charts()$figG
+      output_get1()$figG
     })
   
   output$global_time <-
     renderPlotly({
-      constant_charts()$global_time
+      output_get1()$global_time
     })
   
   output$global_recov_dead <-
     renderPlotly({
-      constant_charts()$global_recov_dead
+      output_get1()$global_recov_dead
     })
   
   output$global_cfr <-
     renderPlotly({
-      constant_charts()$global_cfr
+      output_get1()$global_cfr
     })
   
   output$global_p <-
     renderPlotly({
-      constant_charts()$global_p
+      output_get1()$global_p
     })
   
   output$fig_confirm <-
     renderPlotly({
-      corona_visual(input$countries)$fig_confirm
+      output_get2()$fig_confirm
     })
   
   output$fig_dead <-
     renderPlotly({
-      corona_visual(input$countries)$fig_dead
+      output_get2()$fig_dead
     })
   
   output$fig_recov <-
     renderPlotly({
-      corona_visual(input$countries)$fig_recov
+      output_get2()$fig_recov
     })
   
   output$fig_confirm_S <-
     renderPlotly({
-      corona_visual(input$countries)$fig_confirm_S
+      output_get2()$fig_confirm_S
     })
   
   output$fig_confirm_D <-
     renderPlotly({
-      corona_visual(input$countries)$fig_confirm_D
+      output_get2()$fig_confirm_D
     })
   
   output$fig_Ratio <-
     renderPlotly({
-      corona_visual(input$countries)$fig_Ratio
+      output_get2()$fig_Ratio
     })
   
   output$fig_cfr_print <-
     renderPlotly({
-      corona_visual(input$countries)$fig_cfr_print
+      output_get2()$fig_cfr_print
     })
   
   output$fig_cp_print <-
     renderPlotly({
-      corona_visual(input$countries)$fig_cp_print
+      output_get2()$fig_cp_print
     })
   
   lapply(c(
